@@ -20,6 +20,8 @@ function connectWebSocket() {
     if (msg.type === 'project') {
       currentProjectPath = msg.path;
       if (currentProjectPath) {
+        const projectName = currentProjectPath.split('/').filter(Boolean).pop() || currentProjectPath;
+        document.title = `AIDLC Dashboard - ${projectName}`;
         // Projeto já definido (via CLI ou sessão anterior) — pedir dados
         ws.send(JSON.stringify({ type: 'ready' }));
       } else {
@@ -101,6 +103,8 @@ function selectProjectFromInput() {
 function selectProject(p) {
   currentProjectPath = p;
   saveRecentPath(p);
+  const projectName = p.split('/').filter(Boolean).pop() || p;
+  document.title = `AIDLC Dashboard - ${projectName}`;
   document.getElementById('app').innerHTML =
     `<div class="load-area"><div class="header-logo">🔬</div><h1>AI-DLC v2 Dashboard</h1><p class="load-desc">${t('loading')}</p></div>`;
   if (ws && ws.readyState === 1) {
